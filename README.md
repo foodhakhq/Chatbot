@@ -1,6 +1,6 @@
 ```markdown
 # Chatbot
-
+This repo contains scripts for chatbot staging and production environments.
 ## Overview
 
 This documentation outlines the process of starting and ending a session with a chatbot built using advanced Language Learning Models (LLMs). The chatbot has been deployed on a Google Cloud Platform (GCP) Virtual Machine (VM) instance using a Flask server. It is built on top of the Relhak dataset and leverages the Retrieval-Augmented Generation (RAG) approach from Vertex AI vector search. Embeddings are generated using the `text-embedding-004` model from Google.
