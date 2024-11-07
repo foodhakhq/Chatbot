@@ -1,0 +1,110 @@
+2024-09-11 16:09:37,240 - app - DEBUG - Authorization Header: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:09:37,241 - app - DEBUG - Token extracted: mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:09:38,151 - app - ERROR - Service unavailable, error: 503 recvmsg:Connection reset by peer
+Traceback (most recent call last):
+  File "/home/ai/chatbot/lib/python3.11/site-packages/google/api_core/grpc_helpers.py", line 76, in error_remapped_callable
+    return callable_(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai/chatbot/lib/python3.11/site-packages/grpc/_channel.py", line 1181, in __call__
+    return _end_unary_response_blocking(state, call, False, None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai/chatbot/lib/python3.11/site-packages/grpc/_channel.py", line 1006, in _end_unary_response_blocking
+    raise _InactiveRpcError(state)  # pytype: disable=not-instantiable
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "recvmsg:Connection reset by peer"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_message:"recvmsg:Connection reset by peer", grpc_status:14, created_time:"2024-09-11T16:09:38.149821869+00:00"}"
+>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ai/Chatbot-Relationships/Staging/app.py", line 121, in start_session
+    response_generator = generate_response(user_input, model_choice, session_key, r, user_id)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai/Chatbot-Relationships/Staging/main.py", line 168, in generate_response
+    results = vector_store.similarity_search(query, k=5)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai/chatbot/lib/python3.11/site-packages/langchain_google_vertexai/vectorstores/vectorstores.py", line 160, in similarity_search
+    for document, _ in self.similarity_search_with_score(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai/chatbot/lib/python3.11/site-packages/langchain_google_vertexai/vectorstores/vectorstores.py", line 81, in similarity_search_with_score
+    return self.similarity_search_by_vector_with_score(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai/chatbot/lib/python3.11/site-packages/langchain_google_vertexai/vectorstores/vectorstores.py", line 114, in similarity_search_by_vector_with_score
+    neighbors_list = self._searcher.find_neighbors(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai/chatbot/lib/python3.11/site-packages/langchain_google_vertexai/vectorstores/_searcher.py", line 162, in find_neighbors
+    response = self._endpoint.find_neighbors(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai/chatbot/lib/python3.11/site-packages/google/cloud/aiplatform/matching_engine/matching_engine_index_endpoint.py", line 1551, in find_neighbors
+    response = self._public_match_client.find_neighbors(find_neighbors_request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai/chatbot/lib/python3.11/site-packages/google/cloud/aiplatform_v1beta1/services/match_service/client.py", line 755, in find_neighbors
+    response = rpc(
+               ^^^^
+  File "/home/ai/chatbot/lib/python3.11/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai/chatbot/lib/python3.11/site-packages/google/api_core/grpc_helpers.py", line 78, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ServiceUnavailable: 503 recvmsg:Connection reset by peer
+2024-09-11 16:10:53,380 - app - DEBUG - Authorization Header: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:10:53,381 - app - DEBUG - Token extracted: mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:11:36,064 - app - DEBUG - Authorization Header: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:11:36,064 - app - DEBUG - Token extracted: mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:12:37,336 - app - DEBUG - Authorization Header: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:12:37,337 - app - DEBUG - Token extracted: mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:12:57,625 - app - DEBUG - Authorization Header: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:12:57,625 - app - DEBUG - Token extracted: mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:13:38,788 - app - DEBUG - Authorization Header: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:13:38,788 - app - DEBUG - Token extracted: mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:14:04,998 - app - DEBUG - Authorization Header: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:14:04,998 - app - DEBUG - Token extracted: mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:14:26,493 - app - DEBUG - Authorization Header: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:14:26,494 - app - DEBUG - Token extracted: mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:15:52,544 - app - DEBUG - Authorization Header: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:15:52,545 - app - DEBUG - Token extracted: mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:24:26,091 - app - DEBUG - Authorization Header: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:24:26,091 - app - DEBUG - Token extracted: mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:41:39,070 - app - DEBUG - Authorization Header: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:41:39,070 - app - DEBUG - Token extracted: mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:44:34,147 - app - DEBUG - Authorization Header: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:44:34,148 - app - DEBUG - Token extracted: mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:47:12,798 - app - DEBUG - Authorization Header: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:47:12,798 - app - DEBUG - Token extracted: mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:47:14,746 - app - ERROR - Token limit exceeded: HTTP Status Code 413 - Session Limit Reached: Token count is 12263, exceeding the limit of 150000 tokens.
+Traceback (most recent call last):
+  File "/home/ai/Chatbot-Relationships/Staging/app.py", line 121, in start_session
+    response_generator = generate_response(user_input, model_choice, session_key, r, user_id)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai/Chatbot-Relationships/Staging/main.py", line 185, in generate_response
+    return claude_sonnet.generate_response_with_claude(models["claude"], prompt)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai/Chatbot-Relationships/Staging/claude_sonnet.py", line 35, in generate_response_with_claude
+    raise SessionLimitReachedException(token_count)
+claude_sonnet.SessionLimitReachedException: HTTP Status Code 413 - Session Limit Reached: Token count is 12263, exceeding the limit of 150000 tokens.
+2024-09-11 16:48:37,674 - app - DEBUG - Authorization Header: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:48:37,674 - app - DEBUG - Token extracted: mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:48:41,553 - app - DEBUG - Authorization Header: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:48:41,554 - app - DEBUG - Token extracted: mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:48:44,031 - app - ERROR - Token limit exceeded: HTTP Status Code 413 - Session Limit Reached: Token count is 9901, exceeding the limit of 150000 tokens.
+Traceback (most recent call last):
+  File "/home/ai/Chatbot-Relationships/Staging/app.py", line 121, in start_session
+    response_generator = generate_response(user_input, model_choice, session_key, r, user_id)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai/Chatbot-Relationships/Staging/main.py", line 185, in generate_response
+    return claude_sonnet.generate_response_with_claude(models["claude"], prompt)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai/Chatbot-Relationships/Staging/claude_sonnet.py", line 35, in generate_response_with_claude
+    raise SessionLimitReachedException(token_count)
+claude_sonnet.SessionLimitReachedException: HTTP Status Code 413 - Session Limit Reached: Token count is 9901, exceeding the limit of 150000 tokens.
+2024-09-11 16:48:53,587 - app - DEBUG - Authorization Header: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:48:53,587 - app - DEBUG - Token extracted: mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:48:57,331 - app - DEBUG - Authorization Header: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:48:57,331 - app - DEBUG - Token extracted: mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:49:16,676 - app - DEBUG - Authorization Header: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:49:16,676 - app - DEBUG - Token extracted: mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:50:42,170 - app - DEBUG - Authorization Header: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7
+2024-09-11 16:50:42,170 - app - DEBUG - Token extracted: mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7

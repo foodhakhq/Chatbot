@@ -1,0 +1,38 @@
+runtime: python310  # Python 3.10 version
+service: staging-chatbot
+instance_class: F4_1G  # Adjust this based on your needs and traffic
+
+entrypoint: gunicorn -c gunicorn.conf.py -b :$PORT app:app  # Using gunicorn config file for better control
+
+env_variables:
+  ENV: 'staging'
+  STAGING_API_KEY: 'mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7'
+  STAGING_OPENSEARCH_HOST: 'https://search-foodhak-staging-core-ffnbha54vi5fo2hm6vjcjkffpe.eu-west-2.es.amazonaws.com/user-profiles/_search'
+  STAGING_OPENSEARCH_USER: 'admin'
+  STAGING_OPENSEARCH_PWD: 'HealthyAsianKitchen1$3'
+  STAGING_REDIS_HOST: '10.125.74.235'
+  STAGING_REDIS_PORT: '6379'
+
+# Optional if VPC connector is needed for Redis or other services inside a VPC
+vpc_access_connector:
+  name: projects/central-muse-388319/locations/us-central1/connectors/vpc-access-connector
+
+automatic_scaling:
+  target_cpu_utilization: 0.65  # Increase threshold slightly for better performance under load
+  min_instances: 7  # Keep a minimum of 5 instances to reduce cold starts
+  max_instances: 20  # Increase the max number of instances to handle more traffic
+
+# Health check settings (optional but recommended)
+health_check:
+  enable_health_check: true
+  check_interval_sec: 10
+  timeout_sec: 4
+  healthy_threshold: 2
+  unhealthy_threshold: 3
+  restart_threshold: 60
+
+# Increase request timeout if needed (default is 60 seconds)
+handlers:
+- url: /.*
+  script: auto
+  secure: always
