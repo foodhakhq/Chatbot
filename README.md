@@ -1,144 +1,156 @@
-```markdown
-# Chatbot
-This repo contains scripts for chatbot staging and production environments.
-## Overview
+````markdown
+# Foodhak Chatbot AI Service
 
-This documentation outlines the process of starting and ending a session with a chatbot built using advanced Language Learning Models (LLMs). The chatbot has been deployed on a Google Cloud Platform (GCP) Virtual Machine (VM) instance using a Flask server. It is built on top of the Relhak dataset and leverages the Retrieval-Augmented Generation (RAG) approach from Vertex AI vector search. Embeddings are generated using the `text-embedding-004` model from Google.
+A conversational, real-time nutrition assistant for Foodhak users—personalized, evidence-based, and session-aware.
 
-The chatbot uses a session management tool called Redis, which stores user names and conversations in memory. This API allows for session management through two endpoints: `start_session` and `end_session`. The chatbot does not have a frontend, and all interactions are managed through these endpoints.
+---
 
-## Endpoints
+## 🌍 Environments
 
-### 1. Start Session - Chatbot
+- **Production** API: `https://ai-foodhak.com`
+- **Staging** API: `https://staging.ai-foodhak.com`
 
-This endpoint initializes a session for the chatbot by storing the user ID and the initial message in Redis. This allows the chatbot to maintain context across multiple interactions with the user.
+---
 
-**Endpoint URL:**
+## 🚦 How It Works
 
-`https://www.foodhakai.com/chat/start_session`
+1. **Start a Session:**  
+   - Client POSTs to `/chat/start_session` with user info.
+   - Receives a unique `session_key` and `websocket_url`.
+2. **Chat via WebSocket:**  
+   - Connect to `websocket_url`.
+   - Send plain text messages for conversational nutrition Q&A.
+   - Receive real-time, streaming JSON responses.
+3. **End a Session:**  
+   - POST to `/chat/end_session` to clean up the session.
 
-**HTTP Method:**
+All requests must include an **Authorization** header:  
+`Authorization: Bearer <API_KEY>`
 
-`POST`
+---
 
-**Headers:**
+## 🛠️ API Usage
 
-- `Content-Type: application/json`
-- `Authorization: Bearer test123`
+### 1. Start a Chat Session
 
-**Request Payload:**
+#### Production
+
+```bash
+curl -X POST https://ai-foodhak.com/chat/start_session \
+  -H "Authorization: Bearer <API_KEY>" \
+  -H "Content-Type: application/json" \
+  -d '{"user_id": "USER123", "user_name": "Alex"}'
+````
+
+**Response:**
 
 ```json
 {
-  "user_id": "user123",
-  "user_name": "Abishek",
-  "message": "I’m diabetic, 60 years old, I love to eat sweets, I weigh over 100 kgs."
+  "session_key": "user:USER123:abcdef-1234-uuid",
+  "user_id": "USER123",
+  "user_name": "Alex",
+  "status": "Session started successfully",
+  "conversation_history": [],
+  "websocket_url": "wss://ai-foodhak.com/ws/USER123"
 }
 ```
 
-**Parameters:**
+---
 
-- `user_id`: A unique identifier for the user. This is required to track and manage the user's session.
-- `user_name`: The name of the user initiating the session.
-- `message`: The initial message from the user, which will be used to start the conversation with the chatbot.
+### 2. Real-Time Chat (WebSocket)
 
-**Description:**
+Connect to the `websocket_url` provided.
 
-When this endpoint is called, it creates a new session in Redis by storing the `user_id` and the associated conversation history. The chatbot, which is powered by LLMs such as Gemini-Flash, Claude-3.5-Sonnet, Mistral-Large, and Llama-3.1, will use this data to personalize its responses and maintain context throughout the session.
+* **Send:** Plain text messages (e.g. `"Can I eat peanuts with my profile?"`)
+* **Receive:** Streaming JSON messages
 
-### 2. End Session - Chatbot
+  * Type: `message_start`, `streaming`, `message_stop`, or `error`
 
-This endpoint terminates the session for a given user by deleting their session data from Redis.
+**Example using Python:**
 
-**Endpoint URL:**
+```python
+import websockets
+import asyncio
 
-`https://www.foodhakai.com/chat/end_session`
+async def chat():
+    uri = "wss://ai-foodhak.com/ws/USER123"
+    async with websockets.connect(uri) as ws:
+        await ws.send("Are almonds okay for my cholesterol?")
+        async for msg in ws:
+            print(msg)
 
-**HTTP Method:**
+asyncio.run(chat())
+```
 
-`POST`
+---
 
-**Headers:**
+### 3. End a Session
 
-- `Content-Type: application/json`
-- `Authorization: Bearer test123`
+```bash
+curl -X POST https://ai-foodhak.com/chat/end_session \
+  -H "Authorization: Bearer <API_KEY>" \
+  -H "Content-Type: application/json" \
+  -d '{"user_id": "USER123"}'
+```
 
-**Request Payload:**
+**Success:**
+
+```json
+{ "message": "Session ended successfully" }
+```
+
+---
+
+### 4. Health Check
+
+```bash
+curl https://ai-foodhak.com/health
+```
+
+**Success:**
 
 ```json
 {
-  "user_id": "user123"
+  "status": "healthy",
+  "redis": "connected"
 }
 ```
 
-**Parameters:**
+---
 
-- `user_id`: The unique identifier of the user whose session is to be terminated.
+## 📦 Endpoints
 
-**Description:**
+| Method | Endpoint              | Purpose                                  |
+| ------ | --------------------- | ---------------------------------------- |
+| POST   | `/chat/start_session` | Start a chat session (get WebSocket URL) |
+| WS     | `/ws/{user_id}`       | Real-time chat WebSocket                 |
+| POST   | `/chat/end_session`   | End/clean up a chat session              |
+| GET    | `/health`             | Health check                             |
+| GET    | `/`                   | Welcome message                          |
 
-When this endpoint is called, it removes the session associated with the provided `user_id` from Redis. This effectively ends the conversation, and all the data stored in memory for this session is deleted.
+---
 
-## Technical Details
+## 🔒 Security
 
-- **Deployment**: The chatbot is deployed on a GCP VM instance on port 5000 using Flask.
-- **Models**: The chatbot is powered by several advanced LLMs, including Gemini-Flash, Claude-3.5-Sonnet, Mistral-Large, and Llama-3.1.
-- **Session Management**: Redis is used for session management, storing user names and conversation history in memory.
-- **Dataset**: The chatbot is built on the Relhak dataset, using the Retrieval-Augmented Generation (RAG) approach.
-- **Embedding Generation**: Embeddings for vector search are generated using Google’s `text-embedding-004` model.
+* All endpoints require `Authorization: Bearer <API_KEY>`.
+* Never share your API key.
+* Session and chat data is managed with Redis Cluster.
 
-## Example Usage
+---
 
-### Staging-Start Session
+## 📝 Notes
 
-```bash
-curl -X POST https://www.staging-foodhakai.com/chat2/start_session \
--H "Content-Type: application/json" \
--H "Authorization: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7" \
--d '{
-  "user_id": "0df5911b-b28c-49e4-b574-f9e8acadf7a6",
-  "user_name": "Abishek",
-  "message": "Hi Hello"
-}'
-```
+* Powered by Claude 3 and OpenAI Grok, with seamless fallback logic.
+* Replies are concise, HTML-formatted, and tailored to your Foodhak profile.
+* Vector store and user profile are queried automatically.
+* Rate limits and overloads are handled gracefully with informative errors.
 
-### Staging-End Session
+---
 
-```bash
-curl -X POST https://www.staging-foodhakai.com/chat2/end_session \
--H "Content-Type: application/json" \
--H "Authorization: Bearer mS6WabEO.1Qj6ONyvNvHXkWdbWLFi9mLMgHFVV4m7" \
--d '{
-  "user_id": "0c4f9f04-0ff6-40e7-8726-3394575c8092"
-}'
-```
+## 📣 For developers
 
-### **Production-Start Session**
+* See `main.py` for full implementation.
+* Environment variables required:
+  `API_KEY`, `ANTHROPIC_PRODUCTION_API_KEY`, `PRODUCTION_GROK_API_KEY`, `PRODUCTION_GROK_URL`, `OPENSEARCH_HOST`, `OPENSEARCH_USER`, `OPENSEARCH_PWD`, etc.
 
-```bash
-curl -X POST https://www.foodhakai.com/chat/start_session \
--H "Content-Type: application/json" \
--H "Authorization: Bearer viJ8u142.NaQl7JEW5u8bEJpqnnRuvilTfDbHyWty" \
--d '{
-  "user_id": "9acc25b6-b238-407e-bc85-44d723bf4551",
-  "user_name": "penny bodle",
-  "message": "Hi Hello"
-}'
-```
-
-### Production-End Session
-
-```bash
-curl -X POST https://www.foodhakai.com/chat/end_session \
--H "Content-Type: application/json" \
--H "Authorization: Bearer viJ8u142.NaQl7JEW5u8bEJpqnnRuvilTfDbHyWty" \
--d '{
-  "user_id": "9acc25b6-b238-407e-bc85-44d723bf4551"
-}'
-```
-
-## Conclusion
-
-This API documentation provides a comprehensive guide to using the chatbot’s session management system. By following the instructions outlined above, users can initiate and terminate sessions with the chatbot, allowing for a personalized and context-aware interaction. The chatbot leverages cutting-edge LLM technology and efficient session management through Redis to deliver an optimized user experience.
-```
-This format provides all necessary details to understand how the endpoints function, how to interact with them, and how to configure and use the chatbot API effectively.
+---
